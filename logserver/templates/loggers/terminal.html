@@ -1,0 +1,840 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="terminal-wrapper">
+    <div class="terminal-header">
+        <h2>🔒 Connected to Project: <span id="project-id">{{ project_id }}</span></h2>
+        <div class="terminal-controls">
+            <div class="control-buttons">
+                <button id="pause-btn" class="control-btn pause-btn">⏸️ Pause</button>
+                <button id="clear-btn" class="control-btn clear-btn">🗑️ Clear</button>
+                <button id="export-btn" class="control-btn export-btn">📤 Export</button>
+                <button id="timestamp-toggle-btn" class="control-btn timestamp-btn">🕒 Timestamps</button>
+                <span class="log-count">Logs: <span id="total-logs">0</span></span>
+            </div>
+            <div class="search-bar">
+                <input id="log-search" type="text" placeholder="Search logs..." />
+                <button id="search-clear-btn" class="control-btn search-clear-btn">✖️</button>
+            </div>
+            <div class="log-filters">
+                <button class="filter-btn active" data-level="all">All</button>
+                <button class="filter-btn" data-level="debug">Debug</button>
+                <button class="filter-btn" data-level="info">Info</button>
+                <button class="filter-btn" data-level="warning">Warning</button>
+                <button class="filter-btn" data-level="error">Error</button>
+                <button class="filter-btn" data-level="critical">Critical</button>
+            </div>
+        </div>
+    </div>
+    <div id="terminal-output"></div>
+    <div id="pinned-logs" class="pinned-logs hidden">
+        <h3>Pinned Logs</h3>
+        <div id="pinned-logs-container"></div>
+        <button id="clear-pinned-btn" class="control-btn clear-pinned-btn">🗑️ Clear Pinned</button>
+    </div>
+    <div id="paused-indicator" class="paused-indicator hidden">
+        <span>⏸️ Terminal Paused - <span id="queued-count">0</span> messages queued</span>
+    </div>
+</div>
+
+<style>
+        .terminal-wrapper {
+        background-color: #0B1426;
+        color: #E8F4FD;
+        border-radius: 16px;
+        padding: 2rem;
+        box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+        font-family: 'Fira Code', 'Courier New', monospace;
+        height: calc(100vh - 140px);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .terminal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .terminal-header h2 {
+        font-size: 1.2rem;
+        color: #fff;
+        margin: 0;
+        flex-grow: 1;
+    }
+
+    .terminal-header h2 span {
+        color: #A8E063;
+        font-weight: 500;
+        font-size: 1rem;
+        word-break: break-word;
+    }
+
+    .terminal-controls {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        align-items: flex-end;
+    }
+
+    .control-buttons {
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+    }
+
+    .search-bar {
+        display: flex;
+        gap: 0.5rem;
+        width: 100%;
+    }
+
+    #log-search {
+        padding: 0.4rem;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 6px;
+        color: #E8F4FD;
+        width: 100%;
+        font-size: 0.85rem;
+    }
+
+    #log-search:focus {
+        outline: none;
+        border-color: #A8E063;
+    }
+
+    .search-clear-btn {
+        background: rgba(255, 99, 99, 0.2);
+        color: #ff6363;
+        border-color: rgba(255, 99, 99, 0.3);
+        padding: 0.4rem;
+    }
+
+    .log-count {
+        font-size: 0.85rem;
+        color: #A8E063;
+        font-weight: 500;
+        padding: 0.4rem 0.8rem;
+        background: rgba(168, 224, 99, 0.1);
+        border-radius: 6px;
+        border: 1px solid rgba(168, 224, 99, 0.3);
+    }
+
+    .control-btn {
+        padding: 0.4rem 0.8rem;
+        border: 2px solid transparent;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 0.85rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(10px);
+    }
+
+    .pause-btn {
+        background: rgba(255, 165, 0, 0.2);
+        color: #ffa500;
+        border-color: rgba(255, 165, 0, 0.3);
+    }
+
+    .pause-btn:hover {
+        background: rgba(255, 165, 0, 0.3);
+        transform: translateY(-1px);
+    }
+
+    .pause-btn.paused {
+        background: #4CAF50;
+        color: white;
+        border-color: #4CAF50;
+    }
+
+    .clear-btn, .clear-pinned-btn, .search-clear-btn {
+        background: rgba(255, 99, 99, 0.2);
+        color: #ff6363;
+        border-color: rgba(255, 99, 99, 0.3);
+    }
+
+    .clear-btn:hover, .clear-pinned-btn:hover, .search-clear-btn:hover {
+        background: rgba(255, 99, 99, 0.3);
+        transform: translateY(-1px);
+    }
+
+    .export-btn {
+        background: rgba(76, 175, 80, 0.2);
+        color: #4CAF50;
+        border-color: rgba(76, 175, 80, 0.3);
+    }
+
+    .export-btn:hover {
+        background: rgba(76, 175, 80, 0.3);
+        transform: translateY(-1px);
+    }
+
+    .timestamp-btn {
+        background: rgba(33, 150, 243, 0.2);
+        color: #2196F3;
+        border-color: rgba(33, 150, 243, 0.3);
+    }
+
+    .timestamp-btn:hover {
+        background: rgba(33, 150, 243, 0.3);
+        transform: translateY(-1px);
+    }
+
+    .timestamp-btn.active {
+        background: #2196F3;
+        color: white;
+        border-color: #2196F3;
+    }
+
+    .log-filters {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+    }
+
+    .filter-btn {
+        padding: 0.4rem 0.8rem;
+        border: 2px solid transparent;
+        background: rgba(255, 255, 255, 0.1);
+        color: #E8F4FD;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 0.85rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(10px);
+    }
+
+    .filter-btn:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateY(-1px);
+    }
+
+    .filter-btn.active {
+        background: linear-gradient(45deg, #4A90E2, #A8E063);
+        border-color: rgba(255, 255, 255, 0.3);
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .filter-btn[data-level="debug"].active {
+        background: #00bcd4;
+        border-color: #00bcd4;
+    }
+
+    .filter-btn[data-level="info"].active {
+        background: #4caf50;
+        border-color: #4caf50;
+    }
+
+    .filter-btn[data-level="warning"].active {
+        background: #ffeb3b;
+        border-color: #ffeb3b;
+        color: #000;
+    }
+
+    .filter-btn[data-level="error"].active {
+        background: #f44336;
+        border-color: #f44336;
+    }
+
+    .filter-btn[data-level="critical"].active {
+        background: linear-gradient(45deg, #f44336, #ffeb3b);
+        border-color: #f44336;
+        color: #000;
+        font-weight: 700;
+        animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+        0% { box-shadow: 0 0 0 0 rgba(244, 67, 54, 0.7); }
+        70% { box-shadow: 0 0 0 10px rgba(244, 67, 54, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(244, 67, 54, 0); }
+    }
+
+    #terminal-output {
+        overflow-y: auto;
+        flex: 1;
+        position: relative;
+        scroll-behavior: smooth;
+    }
+
+    .paused-indicator {
+        position: absolute;
+        bottom: 2rem;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(255, 165, 0, 0.9);
+        color: #000;
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 600;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        animation: fadeIn 0.3s ease;
+        z-index: 100;
+    }
+
+    .paused-indicator.hidden {
+        display: none;
+    }
+
+    .pinned-logs {
+        background: rgba(255, 255, 255, 0.05);
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 1rem;
+        max-height: 200px;
+        overflow-y: auto;
+        display: none;
+    }
+
+    .pinned-logs.hidden {
+        display: none;
+    }
+
+    .pinned-logs:not(.hidden) {
+        display: block;
+    }
+
+    .pinned-logs h3 {
+        margin: 0 0 0.5rem;
+        font-size: 1rem;
+        color: #A8E063;
+    }
+
+    #pinned-logs-container .log-line {
+        font-size: 0.85rem;
+        opacity: 0.9;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translate(-50%, 20px); }
+        to { opacity: 1; transform: translate(-50%, 0); }
+    }
+
+    .log-line {
+        padding: 4px 8px;
+        margin-bottom: 2px;
+        border-left: 4px solid transparent;
+        font-size: 0.9rem;
+        white-space: pre-wrap;
+        word-break: break-word;
+        line-height: 1.4;
+        min-height: 20px;
+        position: relative;
+        cursor: pointer;
+    }
+
+    .log-line:hover {
+        background: rgba(255, 255, 255, 0.05);
+    }
+
+    .log-line.hidden {
+        display: none;
+    }
+
+    .log-line.pinned {
+        background: rgba(168, 224, 99, 0.1);
+    }
+
+    .log-line .pin-btn {
+        position: absolute;
+        right: 8px;
+        top: 4px;
+        display: none;
+        background: none;
+        border: none;
+        color: #A8E063;
+        cursor: pointer;
+        font-size: 0.85rem;
+    }
+
+    .log-line:hover .pin-btn {
+        display: inline;
+    }
+
+    .log-line .stack-trace {
+        display: none;
+        background: rgba(0, 0, 0, 0.2);
+        padding: 8px;
+        margin-top: 4px;
+        font-size: 0.85rem;
+        border-left: 2px solid #A8E063;
+    }
+
+    .log-line.expanded .stack-trace {
+        display: block;
+    }
+
+    .log-debug    { color: #00bcd4; border-color: #00bcd4; }
+    .log-info     { color: #4caf50; border-color: #4caf50; }
+    .log-warning  { color: #ffeb3b; border-color: #ffeb3b; }
+    .log-error    { color: #f44336; border-color: #f44336; }
+    .log-critical { 
+        color: #000; 
+        background: linear-gradient(90deg, #f44336, #ffeb3b);
+        border-color: #f44336;
+        font-weight: bold;
+        padding: 6px 10px;
+        border-radius: 4px;
+        animation: criticalBlink 1s infinite alternate;
+    }
+    .log-default  { color: #ccc; }
+
+    @keyframes criticalBlink {
+        from { opacity: 1; }
+        to { opacity: 0.7; }
+    }
+
+    #terminal-output::-webkit-scrollbar, #pinned-logs::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    #terminal-output::-webkit-scrollbar-track, #pinned-logs::-webkit-scrollbar-track {
+        background: #0B1426;
+    }
+
+    #terminal-output::-webkit-scrollbar-thumb, #pinned-logs::-webkit-scrollbar-thumb {
+        background: linear-gradient(180deg, #4A90E2, #A8E063);
+        border-radius: 8px;
+    }
+
+    #terminal-output::-webkit-scrollbar-thumb:hover, #pinned-logs::-webkit-scrollbar-thumb:hover {
+        background: linear-gradient(180deg, #417bbd, #8fcc4b);
+    }
+
+    .log-line * {
+        will-change: auto;
+    }
+
+    @media (max-width: 768px) {
+        .terminal-wrapper {
+            padding: 1rem;
+            height: calc(100vh - 120px);
+        }
+
+        .terminal-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+
+        .terminal-header h2 {
+            font-size: 1rem;
+        }
+
+        .terminal-controls {
+            align-items: stretch;
+            width: 100%;
+        }
+
+        .control-buttons {
+            justify-content: center;
+        }
+
+        .log-filters {
+            align-self: stretch;
+            justify-content: center;
+        }
+
+        .filter-btn {
+            flex: 1;
+            text-align: center;
+            min-width: 60px;
+        }
+
+        .log-line {
+            font-size: 0.85rem;
+        }
+    }
+</style>
+
+<script>
+    const projectId = "{{ project_id }}";
+    const secretKey = "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef";
+    const socket = new WebSocket(`ws://${window.location.host}/ws/logs/`);
+    
+    // Performance optimizations
+    const MAX_VISIBLE_LOGS = 1000;
+    const BATCH_SIZE = 50;
+    const UPDATE_INTERVAL = 100;
+    
+    let currentFilter = 'all';
+    let isPaused = false;
+    let showTimestamps = true;
+    let queuedLogs = [];
+    let allLogs = [];
+    let filteredLogs = [];
+    let pinnedLogs = new Set();
+    let logCounter = 0;
+    let updateTimer = null;
+    let pendingUpdates = [];
+    let searchQuery = '';
+
+    // UI Elements
+    const pauseBtn = document.getElementById('pause-btn');
+    const clearBtn = document.getElementById('clear-btn');
+    const exportBtn = document.getElementById('export-btn');
+    const timestampToggleBtn = document.getElementById('timestamp-toggle-btn');
+    const logSearchInput = document.getElementById('log-search');
+    const searchClearBtn = document.getElementById('search-clear-btn');
+    const pausedIndicator = document.getElementById('paused-indicator');
+    const queuedCount = document.getElementById('queued-count');
+    const totalLogsCounter = document.getElementById('total-logs');
+    const terminalOutput = document.getElementById('terminal-output');
+    const pinnedLogsContainer = document.getElementById('pinned-logs-container');
+    const pinnedLogsSection = document.getElementById('pinned-logs');
+    const clearPinnedBtn = document.getElementById('clear-pinned-btn');
+
+    socket.onopen = function () {
+        socket.send(JSON.stringify({
+            project_id: projectId,
+            secret_key: secretKey
+        }));
+
+        addLogToMemory("✅ Connected to project. Listening for logs...", "log-info", "info");
+    };
+
+    socket.onmessage = function (event) {
+        const data = JSON.parse(event.data);
+        if (data.error === "Unauthorized") {
+            addLogToMemory("⚠️ Unauthorized access. Redirecting to dashboard...", "log-error", "error");
+            setTimeout(() => window.location.href = "/dashboard", 1500);
+            return;
+        }
+
+        const { timestamp, log_level, file_path, message, stack_trace } = data;
+        const logText = `[${timestamp}] [${log_level}] ${file_path} - ${message}`;
+        const level = log_level?.toLowerCase();
+
+        let levelClass = "log-default";
+        if (level === "debug") levelClass = "log-debug";
+        else if (level === "info") levelClass = "log-info";
+        else if (level === "warning") levelClass = "log-warning";
+        else if (level === "error") levelClass = "log-error";
+        else if (level === "critical") levelClass = "log-critical";
+
+        if (isPaused) {
+            queuedLogs.push({
+                text: logText,
+                className: levelClass,
+                logLevel: level,
+                stackTrace: stack_trace
+            });
+            updateQueuedCount();
+        } else {
+            addLogToMemory(logText, levelClass, level, stack_trace);
+        }
+    };
+
+    socket.onclose = function () {
+        addLogToMemory("🔌 Connection closed.", "log-warning", "warning");
+    };
+
+    function addLogToMemory(text, className = "log-default", logLevel = "default", stackTrace = null) {
+        const logEntry = {
+            id: ++logCounter,
+            text: text,
+            className: className,
+            logLevel: logLevel,
+            stackTrace: stackTrace,
+            timestamp: Date.now()
+        };
+
+        allLogs.push(logEntry);
+        totalLogsCounter.textContent = allLogs.length;
+
+        if (!isPaused) {
+            pendingUpdates.push(logEntry);
+            scheduleUpdate();
+        }
+
+        if (allLogs.length > MAX_VISIBLE_LOGS * 2) {
+            allLogs = allLogs.slice(-MAX_VISIBLE_LOGS);
+            rebuildFilteredLogs();
+        }
+    }
+
+    function scheduleUpdate() {
+        if (updateTimer) return;
+        
+        updateTimer = setTimeout(() => {
+            processPendingUpdates();
+            updateTimer = null;
+        }, UPDATE_INTERVAL);
+    }
+
+    function processPendingUpdates() {
+        if (pendingUpdates.length === 0) return;
+
+        const fragment = document.createDocumentFragment();
+        const batchToProcess = pendingUpdates.splice(0, BATCH_SIZE);
+        
+        batchToProcess.forEach(logEntry => {
+            if (shouldShowLog(logEntry)) {
+                const line = createLogElement(logEntry);
+                fragment.appendChild(line);
+            }
+        });
+
+        if (fragment.children.length > 0) {
+            terminalOutput.appendChild(fragment);
+            maintainMaxVisibleLogs();
+            terminalOutput.scrollTop = terminalOutput.scrollHeight;
+        }
+
+        if (pendingUpdates.length > 0) {
+            scheduleUpdate();
+        }
+    }
+
+    function createLogElement(logEntry) {
+        const line = document.createElement("div");
+        line.className = `log-line ${logEntry.className} ${pinnedLogs.has(logEntry.id) ? 'pinned' : ''}`;
+        line.setAttribute('data-log-level', logEntry.logLevel);
+        line.setAttribute('data-log-id', logEntry.id);
+
+        const content = document.createElement("span");
+        content.textContent = formatLogText(logEntry.text);
+        line.appendChild(content);
+
+        if (logEntry.stackTrace) {
+            const stackTraceDiv = document.createElement("div");
+            stackTraceDiv.className = "stack-trace";
+            stackTraceDiv.textContent = logEntry.stackTrace;
+            line.appendChild(stackTraceDiv);
+            line.addEventListener('click', toggleStackTrace);
+        }
+
+        const pinBtn = document.createElement("button");
+        pinBtn.className = "pin-btn";
+        pinBtn.textContent = pinnedLogs.has(logEntry.id) ? "📌 Unpin" : "📍 Pin";
+        pinBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            togglePinLog(logEntry.id, logEntry);
+        });
+        line.appendChild(pinBtn);
+
+        return line;
+    }
+
+    function formatLogText(text) {
+        return showTimestamps ? text : text.replace(/^\[.*?\]\s/, '');
+    }
+
+    function toggleStackTrace(e) {
+        const line = e.currentTarget;
+        line.classList.toggle('expanded');
+    }
+
+    function togglePinLog(logId, logEntry) {
+        if (pinnedLogs.has(logId)) {
+            pinnedLogs.delete(logId);
+            updatePinnedLogs();
+        } else {
+            pinnedLogs.add(logId);
+            addToPinnedLogs(logEntry);
+        }
+        rebuildFilteredLogs();
+    }
+
+    function addToPinnedLogs(logEntry) {
+        const line = createLogElement(logEntry);
+        pinnedLogsContainer.appendChild(line);
+        pinnedLogsSection.classList.remove('hidden');
+    }
+
+    function updatePinnedLogs() {
+        pinnedLogsContainer.innerHTML = '';
+        if (pinnedLogs.size === 0) {
+            pinnedLogsSection.classList.add('hidden');
+            return;
+        }
+        allLogs.filter(log => pinnedLogs.has(log.id)).forEach(addToPinnedLogs);
+    }
+
+    function shouldShowLog(logEntry) {
+        const matchesFilter = currentFilter === 'all' || logEntry.logLevel === currentFilter;
+        const matchesSearch = !searchQuery || logEntry.text.toLowerCase().includes(searchQuery.toLowerCase());
+        return matchesFilter && matchesSearch;
+    }
+
+    function maintainMaxVisibleLogs() {
+        const visibleLines = terminalOutput.children;
+        if (visibleLines.length > MAX_VISIBLE_LOGS) {
+            const toRemove = visibleLines.length - MAX_VISIBLE_LOGS;
+            for (let i = 0; i < toRemove; i++) {
+                terminalOutput.removeChild(visibleLines[0]);
+            }
+        }
+    }
+
+    function rebuildFilteredLogs() {
+        terminalOutput.innerHTML = '';
+        requestAnimationFrame(() => {
+            const fragment = document.createDocumentFragment();
+            allLogs.slice(-MAX_VISIBLE_LOGS).filter(shouldShowLog).forEach(logEntry => {
+                fragment.appendChild(createLogElement(logEntry));
+            });
+            terminalOutput.appendChild(fragment);
+            terminalOutput.scrollTop = terminalOutput.scrollHeight;
+        });
+    }
+
+    function addQueuedLogs() {
+        queuedLogs.forEach(log => {
+            addLogToMemory(log.text, log.className, log.logLevel, log.stackTrace);
+        });
+        queuedLogs = [];
+        updateQueuedCount();
+    }
+
+    function updateQueuedCount() {
+        queuedCount.textContent = queuedLogs.length;
+    }
+
+    function togglePause() {
+        isPaused = !isPaused;
+        
+        if (isPaused) {
+            pauseBtn.textContent = "▶️ Resume";
+            pauseBtn.classList.add('paused');
+            pausedIndicator.classList.remove('hidden');
+        } else {
+            pauseBtn.textContent = "⏸️ Pause";
+            pauseBtn.classList.remove('paused');
+            pausedIndicator.classList.add('hidden');
+            addQueuedLogs();
+        }
+    }
+
+    function toggleTimestamps() {
+        showTimestamps = !showTimestamps;
+        timestampToggleBtn.classList.toggle('active');
+        timestampToggleBtn.textContent = showTimestamps ? "🕒 Timestamps" : "🕒 No Timestamps";
+        rebuildFilteredLogs();
+    }
+
+    function clearTerminal() {
+        allLogs = [];
+        filteredLogs = [];
+        pendingUpdates = [];
+        pinnedLogs.clear();
+        logCounter = 0;
+        terminalOutput.innerHTML = '';
+        pinnedLogsContainer.innerHTML = '';
+        pinnedLogsSection.classList.add('hidden');
+        totalLogsCounter.textContent = '0';
+        if (updateTimer) {
+            clearTimeout(updateTimer);
+            updateTimer = null;
+        }
+        addLogToMemory("🗑️ Terminal cleared.", "log-info", "info");
+    }
+
+    function clearPinnedLogs() {
+        pinnedLogs.clear();
+        updatePinnedLogs();
+        rebuildFilteredLogs();
+    }
+
+    function exportLogs() {
+        const logsToExport = allLogs.map(log => ({
+            timestamp: new Date(log.timestamp).toISOString(),
+            level: log.logLevel.toUpperCase(),
+            message: log.text,
+            stack_trace: log.stackTrace || ''
+        }));
+        const blob = new Blob([JSON.stringify(logsToExport, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `logs_${projectId}_${new Date().toISOString()}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+    }
+
+    function handleSearch() {
+        searchQuery = logSearchInput.value;
+        rebuildFilteredLogs();
+    }
+
+    function clearSearch() {
+        logSearchInput.value = '';
+        searchQuery = '';
+        rebuildFilteredLogs();
+    }
+
+    function filterLogs(level) {
+        currentFilter = level;
+        if (updateTimer) {
+            clearTimeout(updateTimer);
+            updateTimer = null;
+        }
+        rebuildFilteredLogs();
+    }
+
+    // Event Listeners
+    document.addEventListener('DOMContentLoaded', () => {
+        pauseBtn.addEventListener('click', togglePause);
+        clearBtn.addEventListener('click', clearTerminal);
+        exportBtn.addEventListener('click', exportLogs);
+        timestampToggleBtn.addEventListener('click', toggleTimestamps);
+        logSearchInput.addEventListener('input', handleSearch);
+        searchClearBtn.addEventListener('click', clearSearch);
+        clearPinnedBtn.addEventListener('click', clearPinnedLogs);
+
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        filterButtons.forEach(btn => {
+            btn.addEventListener('click', function() {
+                filterButtons.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                const filterLevel = this.getAttribute('data-level');
+                filterLogs(filterLevel);
+            });
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey || e.metaKey) {
+                switch(e.key) {
+                    case ' ':
+                        e.preventDefault();
+                        togglePause();
+                        break;
+                    case 'l':
+                        e.preventDefault();
+                        clearTerminal();
+                        break;
+                    case 't':
+                        e.preventDefault();
+                        toggleTimestamps();
+                        break;
+                    case 'e':
+                        e.preventDefault();
+                        exportLogs();
+                        break;
+                    case 'f':
+                        e.preventDefault();
+                        logSearchInput.focus();
+                        break;
+                }
+            }
+        });
+    });
+
+    // Cleanup on page unload
+    window.addEventListener('beforeunload', () => {
+        if (updateTimer) {
+            clearTimeout(updateTimer);
+        }
+        socket.close();
+    });
+</script>
+
+{% endblock %}

@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Not Found | Numatix</title>
+    <style>
+        :root {
+            --midnight-logic: #0B1426;
+            --glacial-byte: #E8F4FD;
+            --quantum-core: #4A90E2;
+            --insight-pulse: #667B8A;
+            --alert-lime: #A8E063;
+            --white: #FFFFFF;
+            --shadow: rgba(11, 20, 38, 0.1);
+            --error-red: #e74c3c;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--glacial-byte) 0%, rgba(232, 244, 253, 0.3) 100%);
+            color: var(--midnight-logic);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .content-wrapper {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            overflow: hidden;
+        }
+
+        .error-container {
+            text-align: center;
+            max-width: 600px;
+            width: 100%;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            box-shadow: 0 20px 60px var(--shadow);
+            border: 1px solid rgba(74, 144, 226, 0.1);
+            position: relative;
+        }
+
+        .error-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--quantum-core), var(--alert-lime), var(--quantum-core));
+        }
+
+        .error-icon {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 1.5rem;
+            position: relative;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .error-icon svg {
+            width: 100%;
+            height: 100%;
+            color: var(--error-red);
+            filter: drop-shadow(0 8px 20px rgba(231, 76, 60, 0.3));
+        }
+
+        .error-code {
+            font-size: 4.5rem;
+            font-weight: 800;
+            color: var(--error-red);
+            margin-bottom: 0.5rem;
+            animation: popIn 0.8s ease-out;
+        }
+
+        .error-message {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--midnight-logic);
+            margin-bottom: 1rem;
+            animation: slideIn 1s ease-out 0.2s backwards;
+        }
+
+        .error-submessage {
+            font-size: 1.1rem;
+            color: var(--insight-pulse);
+            margin-bottom: 2rem;
+            animation: slideIn 1s ease-out 0.4s backwards;
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 2.5rem;
+            background: linear-gradient(135deg, var(--quantum-core), #5ba0f2);
+            color: var(--white);
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            animation: slideIn 1s ease-out 0.6s backwards;
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(74, 144, 226, 0.4);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        /* Animations */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            0% { transform: translateY(20px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .content-wrapper {
+                padding: 1rem;
+            }
+
+            .error-container {
+                padding: 1.5rem;
+            }
+
+            .error-icon {
+                width: 100px;
+                height: 100px;
+            }
+
+            .error-code {
+                font-size: 3.5rem;
+            }
+
+            .error-message {
+                font-size: 1.5rem;
+            }
+
+            .error-submessage {
+                font-size: 1rem;
+            }
+
+            .btn-primary {
+                padding: 0.875rem 2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .error-container {
+                padding: 1rem;
+                border-radius: 16px;
+            }
+
+            .error-icon {
+                width: 80px;
+                height: 80px;
+            }
+
+            .error-code {
+                font-size: 2.5rem;
+            }
+
+            .error-message {
+                font-size: 1.2rem;
+            }
+
+            .error-submessage {
+                font-size: 0.9rem;
+            }
+
+            .btn-primary {
+                padding: 0.75rem 1.5rem;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="content-wrapper">
+        <div class="error-container">
+            <div class="error-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 14h-1v-1h1v1zm0-3h-1V7h1v6z"/>
+                </svg>
+            </div>
+            <h1 class="error-code">404</h1>
+            <p class="error-message">You're at the Wrong Place!</p>
+            <p class="error-submessage">Looks like this page took a detour to another dimension. Let's get you back on track.</p>
+            <a href="{% url 'dashboard' %}" class="btn-primary">
+                Back to Dashboard
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M5 12h14"/>
+                    <path d="M12 5l7 7-7 7"/>
+                </svg>
+            </a>
+        </div>
+    </div>
+</body>
+</html>

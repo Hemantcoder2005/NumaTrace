@@ -1,0 +1,66 @@
+2025-06-24 20:11:23 [INFO] main.py - IPC objects created
+2025-06-24 20:11:23 [INFO] main.py - Config loaded: {'logger': <helpers.Numatix_logger.AdvancedLogger object at 0x000001FE02778830>, 'MARKET': 'india'}
+2025-06-24 20:11:23 [INFO] routes\register_apps.py - Registering routes
+2025-06-24 20:11:23 [INFO] routes\register_apps.py - Home route registered
+2025-06-24 20:11:23 [INFO] main.py - Routes registered successfully
+2025-06-24 20:11:23 [DEBUG] main.py - ================================
+2025-06-24 20:11:23 [DEBUG] main.py - Path: /openapi.json | Methods: {'HEAD', 'GET'}
+2025-06-24 20:11:23 [DEBUG] main.py - Path: /docs | Methods: {'HEAD', 'GET'}
+2025-06-24 20:11:23 [DEBUG] main.py - Path: /docs/oauth2-redirect | Methods: {'HEAD', 'GET'}
+2025-06-24 20:11:23 [DEBUG] main.py - Path: /redoc | Methods: {'HEAD', 'GET'}
+2025-06-24 20:11:23 [DEBUG] main.py - Path: / | Methods: {'GET'}
+2025-06-24 20:11:23 [DEBUG] main.py - Path: /ping | Methods: {'GET'}
+2025-06-24 20:11:23 [DEBUG] main.py - Path: /strategies | Methods: {'GET'}
+2025-06-24 20:11:23 [DEBUG] main.py - Path: /parameters/{strategy_name} | Methods: {'GET'}
+2025-06-24 20:11:23 [DEBUG] main.py - Path: /parameters/{strategy_name} | Methods: {'POST'}
+2025-06-24 20:11:23 [DEBUG] main.py - Path: /parameters/{strategy_name}/{strategy_id} | Methods: {'DELETE'}
+2025-06-24 20:11:23 [DEBUG] main.py - Path: /backtest | Methods: {'POST'}
+2025-06-24 20:11:23 [DEBUG] main.py - Path: /backtest | Methods: {'GET'}
+2025-06-24 20:11:23 [DEBUG] main.py - Path: /backtest/{id} | Methods: {'DELETE'}
+2025-06-24 20:11:23 [DEBUG] main.py - Path: /backtest/{strategy_name}/{backtest_id} | Methods: {'GET'}
+2025-06-24 20:11:23 [DEBUG] main.py - Path: /ws/bots | Methods: Unknown
+2025-06-24 20:11:23 [DEBUG] main.py - Path: /bots | Methods: {'POST'}
+2025-06-24 20:11:23 [DEBUG] main.py - Path: /ws/task | Methods: Unknown
+2025-06-24 20:11:23 [DEBUG] main.py - ================================
+
+2025-06-24 20:11:23 [INFO] main.py - Running on 8 cores
+2025-06-24 20:11:23 [INFO] main.py - Starting LiveTrade on different core...
+2025-06-24 20:11:23 [INFO] main.py - LiveTrade started
+2025-06-24 20:11:23 [INFO] Unknown - Starting uvicorn server...
+2025-06-24 20:11:51 [INFO] routes\backtest.py - Getting all backtests grouped by strategy
+2025-06-24 20:11:51 [INFO] routes\strategies.py - Getting strategies
+2025-06-24 20:11:51 [INFO] routes\backtest.py - Getting all backtests grouped by strategy
+2025-06-24 20:11:51 [INFO] routes\strategies.py - Getting strategies
+2025-06-24 20:11:52 [INFO] routes\backtest.py - Getting all backtests grouped by strategy
+2025-06-24 20:11:53 [INFO] routes\backtest.py - Getting all backtests grouped by strategy
+2025-06-24 20:11:55 [INFO] routes\backtest.py - Getting all backtests grouped by strategy
+2025-06-24 20:11:55 [INFO] routes\backtest.py - Getting all backtests grouped by strategy
+2025-06-24 20:11:56 [INFO] routes\backtest.py - Getting all backtests grouped by strategy
+2025-06-24 20:11:57 [INFO] routes\backtest.py - Getting all backtests grouped by strategy
+2025-06-24 20:11:58 [INFO] routes\backtest.py - Getting all backtests grouped by strategy
+2025-06-24 20:11:59 [INFO] routes\backtest.py - Getting all backtests grouped by strategy
+2025-06-24 20:12:00 [INFO] routes\backtest.py - Getting all backtests grouped by strategy
+2025-06-24 20:12:01 [INFO] routes\backtest.py - Getting all backtests grouped by strategy
+2025-06-24 20:12:02 [INFO] routes\backtest.py - Getting backtest details for ID: 3
+2025-06-24 20:12:02 [INFO] helpers\db.py - Strategy row: (2,)
+2025-06-24 20:12:02 [INFO] routes\backtest.py - Getting backtest details for ID: 3
+2025-06-24 20:12:02 [INFO] helpers\db.py - Strategy row: (2,)
+2025-06-24 20:12:32 [INFO] routes\backtest.py - Getting all backtests grouped by strategy
+2025-06-24 20:12:32 [INFO] routes\strategies.py - Getting strategies
+2025-06-24 20:12:32 [INFO] routes\backtest.py - Getting all backtests grouped by strategy
+2025-06-24 20:12:32 [INFO] routes\strategies.py - Getting strategies
+2025-06-24 20:12:33 [INFO] routes\backtest.py - Getting all backtests grouped by strategy
+2025-06-24 20:12:34 [INFO] routes\backtest.py - Getting all backtests grouped by strategy
+2025-06-24 20:12:35 [INFO] routes\backtest.py - Getting all backtests grouped by strategy
+2025-06-24 20:12:36 [INFO] routes\backtest.py - Getting all backtests grouped by strategy
+2025-06-24 20:12:37 [INFO] routes\backtest.py - Getting all backtests grouped by strategy
+2025-06-24 20:12:38 [INFO] routes\backtest.py - Getting all backtests grouped by strategy
+2025-06-24 20:12:39 [INFO] routes\backtest.py - Getting all backtests grouped by strategy
+2025-06-24 20:12:40 [INFO] routes\backtest.py - Getting all backtests grouped by strategy
+2025-06-24 20:12:43 [INFO] routes\backtest.py - Getting all backtests grouped by strategy
+2025-06-24 20:12:43 [INFO] routes\strategies.py - Getting strategies
+2025-06-24 20:12:43 [INFO] routes\backtest.py - Getting all backtests grouped by strategy
+2025-06-24 20:12:43 [INFO] routes\strategies.py - Getting strategies
+2025-06-24 20:12:44 [INFO] routes\backtest.py - Getting all backtests grouped by strategy
+2025-06-24 20:12:44 [INFO] routes\strategies.py - Getting strategies
+2025-06-24 20:12:44 [INFO] routes\strategies.py - Getting strategies

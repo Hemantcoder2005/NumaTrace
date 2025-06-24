@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Numatix LogSystem</title>
+    <style>
+        :root {
+            --midnight-logic: #0B1426;
+            --glacial-byte: #E8F4FD;
+            --quantum-core: #4A90E2;
+            --insight-pulse: #667B8A;
+            --alert-lime: #A8E063;
+            --white: #FFFFFF;
+            --shadow: rgba(11, 20, 38, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            overflow: hidden; /* Prevent body scrolling */
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--glacial-byte) 0%, rgba(232, 244, 253, 0.3) 100%);
+            color: var(--midnight-logic);
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Content Wrapper */
+        .content-wrapper {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            overflow: hidden; /* Disable scrolling */
+        }
+
+        /* Login Styles */
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            padding: 2rem;
+        }
+
+        .login-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 3rem;
+            box-shadow: 0 20px 60px rgba(11, 20, 38, 0.15), 0 0 0 1px rgba(74, 144, 226, 0.1);
+            width: 100%;
+            max-width: 450px;
+            border: 1px solid rgba(74, 144, 226, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--quantum-core), var(--alert-lime), var(--quantum-core));
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .login-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--quantum-core), var(--alert-lime));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            color: white;
+            box-shadow: 0 8px 32px rgba(74, 144, 226, 0.3);
+        }
+
+        .login-header h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--midnight-logic);
+            margin-bottom: 0.5rem;
+        }
+
+        .login-header p {
+            color: var(--insight-pulse);
+            font-size: 1rem;
+            font-weight: 400;
+        }
+
+        .error-container {
+            margin-bottom: 1.5rem;
+        }
+
+        .error-message {
+            background: linear-gradient(135deg, #fee, #fdd);
+            border: 1px solid #fbb;
+            border-radius: 12px;
+            padding: 1rem;
+            color: #c53030;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .error-message svg {
+            flex-shrink: 0;
+            color: #e53e3e;
+        }
+
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: var(--midnight-logic);
+            font-size: 0.95rem;
+        }
+
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 1rem;
+            color: var(--insight-pulse);
+            z-index: 1;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 1rem 1rem 1rem 3rem;
+            border: 2px solid rgba(74, 144, 226, 0.2);
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.8);
+            color: var(--midnight-logic);
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--quantum-core);
+            box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+            background: white;
+        }
+
+        .form-group input.error {
+            border-color: #e53e3e;
+            box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.1);
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 1rem;
+            background: none;
+            border: none;
+            color: var(--insight-pulse);
+            cursor: pointer;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.2s ease;
+        }
+
+        .password-toggle:hover {
+            color: var(--quantum-core);
+        }
+
+        .field-errors {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .field-error {
+            color: #e53e3e;
+            font-size: 0.875rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .field-error::before {
+            content: '⚠';
+            font-size: 0.75rem;
+        }
+
+        .checkbox-group {
+            flex-direction: row !important;
+            align-items: center;
+            gap: 0.75rem !important;
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            font-weight: 500;
+            color: var(--midnight-logic);
+        }
+
+        .checkbox-label input[type="checkbox"] {
+            width: auto !important;
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+
+        .login-button {
+            background: linear-gradient(135deg, var(--quantum-core), #5ba0f2);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .login-button:hover::before {
+            left: 100%;
+        }
+
+        .login-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(74, 144, 226, 0.4);
+        }
+
+        .login-button:active {
+            transform: translateY(0);
+        }
+
+        .login-footer {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(74, 144, 226, 0.1);
+        }
+
+        .login-footer p {
+            color: var(--insight-pulse);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .help-link {
+            color: var(--quantum-core);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.2s ease;
+        }
+
+        .help-link:hover {
+            color: var(--midnight-logic);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .content-wrapper {
+                padding: 1rem;
+            }
+
+            .login-container {
+                padding: 1rem;
+                align-items: center;
+            }
+
+            .login-card {
+                padding: 2rem;
+                max-width: 100%;
+            }
+
+            .login-header h2 {
+                font-size: 1.75rem;
+            }
+
+            .login-icon {
+                width: 70px;
+                height: 70px;
+            }
+
+            .form-group input {
+                padding: 0.875rem 0.875rem 0.875rem 2.75rem;
+            }
+
+            .input-icon {
+                left: 0.875rem;
+            }
+
+            .password-toggle {
+                right: 0.875rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .login-card {
+                padding: 1.5rem;
+                border-radius: 16px;
+            }
+
+            .login-header h2 {
+                font-size: 1.5rem;
+            }
+
+            .login-icon {
+                width: 60px;
+                height: 60px;
+            }
+
+            .form-group input {
+                font-size: 16px; /* Prevents zoom on iOS */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="content-wrapper">
+        <div class="login-container">
+            <div class="login-card">
+                <div class="login-header">
+                    <div class="login-icon">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
+                            <polyline points="10,17 15,12 10,7"/>
+                            <line x1="15" y1="12" x2="3" y2="12"/>
+                        </svg>
+                    </div>
+                    <h2>Welcome Back</h2>
+                    <p>log in to your Numatix LogSystem account</p>
+                </div>
+
+                <!-- Display non-field errors -->
+                {% if form.non_field_errors %}
+                    <div class="error-container">
+                        {% for error in form.non_field_errors %}
+                            <div class="error-message">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <line x1="15" y1="9" x2="9" y2="15"/>
+                                    <line x1="9" y1="9" x2="15" y2="15"/>
+                                </svg>
+                                {{ error }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                <form method="POST" class="login-form">
+                    {% csrf_token %}
+                    <!-- Username Field -->
+                    <div class="form-group">
+                        <label for="{{ form.username.id_for_label }}" class="form-label">
+                            {{ form.username.label }}
+                        </label>
+                        <div class="input-wrapper">
+                            <svg class="input-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                                <circle cx="12" cy="7" r="4"/>
+                            </svg>
+                            {{ form.username }}
+                        </div>
+                        {% if form.username.errors %}
+                            <div class="field-errors">
+                                {% for error in form.username.errors %}
+                                    <span class="field-error">{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Password Field -->
+                    <div class="form-group">
+                        <label for="{{ form.password.id_for_label }}" class="form-label">
+                            {{ form.password.label }}
+                        </label>
+                        <div class="input-wrapper">
+                            <svg class="input-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                                <circle cx="12" cy="16" r="1"/>
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                            </svg>
+                            {{ form.password }}
+                            <button type="button" class="password-toggle" onclick="togglePassword()">
+                                <svg id="eye-open" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                    <circle cx="12" cy="12" r="3"/>
+                                </svg>
+                                <svg id="eye-closed" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: none;">
+                                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
+                                    <line x1="1" y1="1" x2="23" y2="23"/>
+                                </svg>
+                            </button>
+                        </div>
+                        {% if form.password.errors %}
+                            <div class="field-errors">
+                                {% for error in form.password.errors %}
+                                    <span class="field-error">{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Remember Me (if available) -->
+                    {% if form.remember_me %}
+                    <div class="form-group checkbox-group">
+                        <label class="checkbox-label">
+                            {{ form.remember_me }}
+                            <span class="checkbox-text">Remember me</span>
+                        </label>
+                    </div>
+                    {% endif %}
+
+                    <button type="submit" class="login-button">
+                        <span class="button-text">log In</span>
+                        <svg class="button-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14"/>
+                            <path d="M12 5l7 7-7 7"/>
+                        </svg>
+                    </button>
+                </form>
+
+                <!-- <div class="login-footer">
+                    <p>Need help accessing your account?</p>
+                    <a href="#" class="help-link">Contact Support</a>
+                </div> -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function togglePassword() {
+            const passwordField = document.querySelector('input[type="password"], input[type="text"][name*="password"]');
+            const eyeOpen = document.getElementById('eye-open');
+            const eyeClosed = document.getElementById('eye-closed');
+            
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text';
+                eyeOpen.style.display = 'none';
+                eyeClosed.style.display = 'block';
+            } else {
+                passwordField.type = 'password';
+                eyeOpen.style.display = 'block';
+                eyeClosed.style.display = 'none';
+            }
+        }
+
+        // Add error class to inputs with errors
+        document.addEventListener('DOMContentLoaded', function() {
+            const errorInputs = document.querySelectorAll('.field-errors');
+            errorInputs.forEach(function(errorDiv) {
+                const input = errorDiv.previousElementSibling.querySelector('input');
+                if (input) {
+                    input.classList.add('error');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

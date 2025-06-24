@@ -1,0 +1,696 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<style>
+    .dashboard-container {
+        width: 100%;
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0;
+    }
+
+    .dashboard-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    .dashboard-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: var(--midnight-logic);
+        margin: 0;
+    }
+
+    .add-project-btn {
+        background: linear-gradient(135deg, var(--quantum-core), #5ba0f2);
+        color: var(--white);
+        border: none;
+        padding: 0.875rem 2rem;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 1rem;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: all 0.2s ease;
+        cursor: pointer;
+        box-shadow: 0 2px 8px rgba(74, 144, 226, 0.2);
+    }
+
+    .add-project-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(74, 144, 226, 0.3);
+    }
+
+    .projects-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 1.5rem;
+        margin-top: 2rem;
+    }
+
+    .project-card {
+        background: var(--white);
+        border-radius: 16px;
+        padding: 1.5rem;
+        box-shadow: 0 4px 12px var(--shadow);
+        border: 1px solid rgba(74, 144, 226, 0.1);
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .project-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, var(--quantum-core), var(--alert-lime));
+        border-radius: 16px 16px 0 0;
+    }
+
+    .project-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 25px rgba(74, 144, 226, 0.15);
+        border-color: var(--quantum-core);
+    }
+
+    .project-name {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: var(--midnight-logic);
+        margin-bottom: 1rem;
+        line-height: 1.3;
+        word-break: break-word;
+    }
+
+    .project-card p {
+        font-size: 0.875rem;
+        color: var(--insight-pulse);
+        margin-bottom: 0.75rem;
+        line-height: 1.5;
+        word-break: break-word;
+    }
+
+    .project-card p.status {
+        font-weight: 600;
+        margin-bottom: 1rem;
+    }
+
+    .project-card p.status.active {
+        color: #2ecc71;
+    }
+
+    .project-card p.status.inactive {
+        color: #e74c3c;
+    }
+
+    .project-actions {
+        display: flex;
+        gap: 0.75rem;
+        margin-top: auto;
+    }
+
+    .action-btn {
+        flex: 1;
+        padding: 0.625rem 1rem;
+        border: none;
+        border-radius: 8px;
+        font-weight: 500;
+        font-size: 0.875rem;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.375rem;
+        transition: all 0.2s ease;
+        cursor: pointer;
+        box-sizing: border-box;
+    }
+
+    .view-btn {
+        background: linear-gradient(135deg, var(--alert-lime), #b8e66d);
+        color: var(--midnight-logic);
+    }
+
+    .view-btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 3px 12px rgba(168, 224, 99, 0.3);
+    }
+
+    .delete-btn {
+        background: linear-gradient(135deg, #e74c3c, #c0392b);
+        color: var(--white);
+    }
+
+    .delete-btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 3px 12px rgba(231, 76, 60, 0.3);
+    }
+
+    .toggle-status-btn {
+        background: linear-gradient(135deg, #3498db, #2980b9);
+        color: var(--white);
+        flex: 1;
+        padding: 0.625rem 1rem;
+        border: none;
+        border-radius: 8px;
+        font-weight: 500;
+        font-size: 0.875rem;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.375rem;
+        transition: all 0.2s ease;
+        cursor: pointer;
+    }
+
+    .toggle-status-btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 3px 12px rgba(52, 152, 219, 0.3);
+    }
+
+    .download-logs-btn {
+        background: linear-gradient(135deg, #9b59b6, #8e44ad);
+        color: var(--white);
+        border: none;
+        padding: 0.625rem 1rem;
+        border-radius: 8px;
+        font-weight: 500;
+        font-size: 0.875rem;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.375rem;
+        transition: all 0.2s ease;
+        cursor: pointer;
+        width: 100%;
+        margin-top: 0.75rem;
+        box-sizing: border-box;
+    }
+
+    .download-logs-btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 3px 12px rgba(155, 89, 182, 0.3);
+        background: linear-gradient(135deg, #a569bd, #9b59b6);
+    }
+
+    .download-logs-btn:active {
+        transform: translateY(0);
+        box-shadow: 0 2px 8px rgba(155, 89, 182, 0.2);
+    }
+
+    .no-projects {
+        text-align: center;
+        padding: 4rem 2rem;
+        color: var(--insight-pulse);
+    }
+
+    .no-projects h3 {
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+        color: var(--midnight-logic);
+    }
+
+    /* Modal Styles */
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(5px);
+        z-index: 1000;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .modal.show {
+        display: flex;
+    }
+
+    .modal-content {
+        background: var(--white);
+        border-radius: 16px;
+        padding: 2rem;
+        width: 100%;
+        max-width: 500px;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+        position: relative;
+    }
+
+    .modal-content h2 {
+        font-size: 1.75rem;
+        font-weight: 600;
+        color: var(--midnight-logic);
+        margin-bottom: 1.5rem;
+    }
+
+    .modal-content form {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .modal-content label {
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: var(--insight-pulse);
+    }
+
+    .modal-content input,
+    .modal-content textarea {
+        padding: 0.75rem;
+        border: 1px solid rgba(74, 144, 226, 0.2);
+        border-radius: 8px;
+        font-size: 0.875rem;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .modal-content textarea {
+        resize: vertical;
+        min-height: 100px;
+    }
+
+    .modal-content button[type="submit"] {
+        background: linear-gradient(135deg, var(--quantum-core), #5ba0f2);
+        color: #ffffff;
+        border: none;
+        padding: 0.875rem;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .modal-content button[type="submit"]:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(74, 144, 226, 0.3);
+        background: linear-gradient(135deg, #4a90e2, #5ba0f2);
+    }
+
+    .modal-close {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        background: none;
+        border: none;
+        font-size: 1.25rem;
+        color: var(--insight-pulse);
+        cursor: pointer;
+    }
+
+    /* Toast Styles */
+    .toast-container {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 1100;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .toast {
+        padding: 1rem 1.5rem;
+        border-radius: 8px;
+        color: #ffffff;
+        font-weight: 500;
+        font-size: 0.875rem;
+        min-width: 200px;
+        max-width: 300px;
+        opacity: 0;
+        transform: translateX(20px);
+        transition: opacity 0.3s ease, transform 0.3s ease;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .toast.show {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    .toast.success {
+        background: linear-gradient(135deg, #2ecc71, #27ae60);
+    }
+
+    .toast.error {
+        background: linear-gradient(135deg, #e74c3c, #c0392b);
+    }
+
+    .toast.warning {
+        background: linear-gradient(135deg, #f39c12, #d68910);
+    }
+
+    .toast.info {
+        background: linear-gradient(135deg, #3498db, #2980b9);
+    }
+
+    .toast-icon {
+        font-size: 1rem;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .dashboard-header {
+            flex-direction: column;
+            align-items: stretch;
+            text-align: center;
+        }
+
+        .dashboard-title {
+            font-size: 2rem;
+        }
+
+        .add-project-btn {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .projects-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .project-actions {
+            flex-direction: column;
+        }
+
+        .action-btn,
+        .toggle-status-btn {
+            width: 100%;
+        }
+
+        .modal-content {
+            width: 90%;
+            padding: 1.5rem;
+        }
+
+        .toast-container {
+            right: 10px;
+            width: calc(100% - 20px);
+        }
+
+        .toast {
+            max-width: 100%;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <div class="dashboard-header">
+        <h1 class="dashboard-title">Project Dashboard</h1>
+        <button class="add-project-btn" onclick="showModal()">+ Add New Project</button>
+    </div>
+
+    <!-- Projects Grid -->
+    {% if projects %}
+    <div class="projects-grid">
+        {% for project in projects %}
+        <div class="project-card" data-project-id="{{ project.id }}">
+            <h3 class="project-name">{{ project.name }}</h3>
+            <h4 class="project-name">Project ID: {{project.project_id}}</h4>
+            <p>Description: {{ project.description }}</p>
+            <p>Created: {{ project.created_at }}</p>
+            <p>Developer Email: {{ project.developer_email }}</p>
+            {% if project.last_log_at %}
+            <p>Last Log: {{ project.last_log_at }}</p>
+            {% else %}
+            <p>Last Log: N/A</p>
+            {% endif %}
+            <p>Secret Key: {{ project.secret_key }}</p>
+            <p class="status {% if project.is_active %}active{% else %}inactive{% endif %}">
+                Status: {% if project.is_active %}Active{% else %}Inactive{% endif %}
+            </p>
+            <div class="project-actions">
+                <a href="/view-project/{{ project.project_id }}" class="action-btn view-btn">View</a>
+                <button onclick="toggleProjectStatus({{ project.id }}, '{{ project.name|escapejs }}')"
+                    class="action-btn toggle-status-btn">
+                    Toggle Status
+                </button>
+                <button onclick="deleteProject({{ project.id }}, '{{ project.name|escapejs }}')"
+                    class="action-btn delete-btn">Delete</button>
+            </div>
+            <button onclick="downloadLogs('{{ project.project_id }}')"
+                    class="download-logs-btn">
+                    📥 Download Logs
+            </button>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="no-projects">
+        <h3>No Projects Yet</h3>
+        <p>Start by creating your first project!</p>
+        <button class="btn btn-primary" onclick="showModal()">Create First Project</button>
+    </div>
+    {% endif %}
+
+    <!-- Modal -->
+    <div class="modal" id="addProjectModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">×</button>
+            <h2>Add New Project</h2>
+            <form id="addProjectForm">
+                {% csrf_token %}
+                <label for="projectName">Project Name</label>
+                <input type="text" id="projectName" name="name" required>
+                <label for="ownerEmail">Developer Email</label>
+                <input type="email" id="ownerEmail" name="owner_email" required>
+                <label for="description">Description</label>
+                <textarea id="description" name="description" required></textarea>
+                <button type="submit">Create Project</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+</div>
+
+<script>
+    function showModal() {
+        document.getElementById('addProjectModal').classList.add('show');
+    }
+
+    function closeModal() {
+        document.getElementById('addProjectModal').classList.remove('show');
+        document.getElementById('addProjectForm').reset();
+    }
+
+    function showToast(type, message) {
+        const toastContainer = document.getElementById('toastContainer');
+        const toast = document.createElement('div');
+        toast.className = `toast ${type} show`;
+        
+        let icon = '';
+        switch(type) {
+            case 'success': icon = '✓'; break;
+            case 'error': icon = '✗'; break;
+            case 'warning': icon = '⚠'; break;
+            case 'info': icon = 'ℹ'; break;
+            default: icon = '•';
+        }
+        
+        toast.innerHTML = `
+            <span class="toast-icon">${icon}</span>
+            <span>${message}</span>
+        `;
+        
+        toastContainer.appendChild(toast);
+        
+        setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => toast.remove(), 300);
+        }, 4000);
+    }
+
+    function getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+        return null;
+    }
+
+    async function toggleProjectStatus(projectId, projectName) {
+        try {
+            const response = await fetch(`/api/projects/${projectId}/toggle-status/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken'),
+                },
+                credentials: 'include'
+            });
+
+            if (response.ok) {
+                showToast('success', `Status toggled for "${projectName}"!`);
+                setTimeout(() => location.reload(), 2000);
+            } else {
+                const errorData = await response.json().catch(() => ({}));
+                const message = response.status === 500
+                    ? 'Server error occurred while toggling status. Please try again later.'
+                    : errorData.message || `Failed to toggle status for "${projectName}"`;
+                showToast('error', message);
+                console.error(`Toggle status failed: ${response.status}`, errorData);
+            }
+        } catch (error) {
+            showToast('error', `Error: ${error.message}`);
+            console.error('Toggle status request failed:', error);
+        }
+    }
+
+    async function downloadLogs(projectId) {
+        try {
+            showToast('info', 'Preparing log download...');
+            
+            const response = await fetch(`/api/projects/${projectId}/download-logs/`, {
+                method: 'GET',
+                headers: {
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                credentials: 'include'
+            });
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                
+                if (response.status === 404 || errorText.includes("No logs found")) {
+                    showToast('warning', "No logs found for this project.");
+                } else if (response.status === 500) {
+                    showToast('error', "Server error occurred while preparing logs. Please try again later.");
+                } else {
+                    showToast('error', `Download failed: ${response.status} - ${errorText}`);
+                }
+                return;
+            }
+
+            const blob = await response.blob();
+
+            if (blob.size === 0) {
+                showToast('warning', "No logs available to download.");
+                return;
+            }
+
+            // Create download link
+            const downloadUrl = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = downloadUrl;
+            a.download = `project_${projectId}_logs.zip`;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            window.URL.revokeObjectURL(downloadUrl);
+
+            showToast('success', 'Logs downloaded successfully!');
+
+        } catch (error) {
+            console.error("Download error:", error);
+            showToast('error', "An error occurred while downloading logs. Please check your connection and try again.");
+        }
+    }
+
+    async function deleteProject(projectId, projectName) {
+        if (!confirm(`Are you sure you want to delete "${projectName}"? This action cannot be undone.`)) {
+            return;
+        }
+
+        try {
+            const response = await fetch(`/api/projects/${projectId}/`, {
+                method: 'DELETE',
+                headers: {
+                    'X-CSRFToken': getCookie('csrftoken'),
+                },
+                credentials: 'include'
+            });
+
+            if (response.ok) {
+                showToast('success', `Project "${projectName}" deleted successfully!`);
+                setTimeout(() => location.reload(), 2000);
+            } else {
+                const errorData = await response.json().catch(() => ({}));
+                const message = response.status === 500
+                    ? 'Server error occurred while deleting project. Please try again later.'
+                    : errorData.message || `Failed to delete project "${projectName}"`;
+                showToast('error', message);
+                console.error(`Delete failed: ${response.status}`, errorData);
+            }
+        } catch (error) {
+            showToast('error', `Error: ${error.message}`);
+            console.error('Delete request failed:', error);
+        }
+    }
+    
+    document.getElementById('addProjectForm').addEventListener('submit', async function (event) {
+        event.preventDefault();
+        const formData = new FormData(event.target);
+        const projectData = {
+            name: formData.get('name'),
+            developer_email: formData.get('owner_email'),
+            description: formData.get('description')
+        };
+        const csrfToken = formData.get('csrfmiddlewaretoken');
+
+        try {
+            const response = await fetch('/api/projects/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken
+                },
+                body: JSON.stringify(projectData),
+                credentials: 'include'
+            });
+
+            if (response.ok) {
+                closeModal();
+                showToast('success', 'Project created successfully!');
+                setTimeout(() => location.reload(), 2000);
+            } else {
+                const errorData = await response.json().catch(() => ({}));
+                const message = response.status === 500
+                    ? 'Server error occurred while creating project. Please try again later.'
+                    : errorData.message || 'Failed to create project';
+                showToast('error', message);
+                console.error(`Create project failed: ${response.status}`, errorData);
+            }
+        } catch (error) {
+            showToast('error', `Error: ${error.message}`);
+            console.error('Create project request failed:', error);
+        }
+    });
+
+    // Close modal when clicking outside
+    document.getElementById('addProjectModal').addEventListener('click', function(event) {
+        if (event.target === this) {
+            closeModal();
+        }
+    });
+
+    // Close modal with Escape key
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+            closeModal();
+        }
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,29 @@
+2025-06-24 19:55:15 [INFO] main.py - IPC objects created
+2025-06-24 19:55:15 [INFO] main.py - Config loaded: {'logger': <helpers.Numatix_logger.AdvancedLogger object at 0x0000024DF1178830>, 'MARKET': 'india'}
+2025-06-24 19:55:15 [INFO] routes\register_apps.py - Registering routes
+2025-06-24 19:55:15 [INFO] routes\register_apps.py - Home route registered
+2025-06-24 19:55:15 [INFO] main.py - Routes registered successfully
+2025-06-24 19:55:15 [DEBUG] main.py - ================================
+2025-06-24 19:55:15 [DEBUG] main.py - Path: /openapi.json | Methods: {'HEAD', 'GET'}
+2025-06-24 19:55:15 [DEBUG] main.py - Path: /docs | Methods: {'HEAD', 'GET'}
+2025-06-24 19:55:15 [DEBUG] main.py - Path: /docs/oauth2-redirect | Methods: {'HEAD', 'GET'}
+2025-06-24 19:55:15 [DEBUG] main.py - Path: /redoc | Methods: {'HEAD', 'GET'}
+2025-06-24 19:55:15 [DEBUG] main.py - Path: / | Methods: {'GET'}
+2025-06-24 19:55:15 [DEBUG] main.py - Path: /ping | Methods: {'GET'}
+2025-06-24 19:55:15 [DEBUG] main.py - Path: /strategies | Methods: {'GET'}
+2025-06-24 19:55:15 [DEBUG] main.py - Path: /parameters/{strategy_name} | Methods: {'GET'}
+2025-06-24 19:55:15 [DEBUG] main.py - Path: /parameters/{strategy_name} | Methods: {'POST'}
+2025-06-24 19:55:15 [DEBUG] main.py - Path: /parameters/{strategy_name}/{strategy_id} | Methods: {'DELETE'}
+2025-06-24 19:55:15 [DEBUG] main.py - Path: /backtest | Methods: {'POST'}
+2025-06-24 19:55:15 [DEBUG] main.py - Path: /backtest | Methods: {'GET'}
+2025-06-24 19:55:15 [DEBUG] main.py - Path: /backtest/{id} | Methods: {'DELETE'}
+2025-06-24 19:55:15 [DEBUG] main.py - Path: /backtest/{strategy_name}/{backtest_id} | Methods: {'GET'}
+2025-06-24 19:55:15 [DEBUG] main.py - Path: /ws/bots | Methods: Unknown
+2025-06-24 19:55:15 [DEBUG] main.py - Path: /bots | Methods: {'POST'}
+2025-06-24 19:55:15 [DEBUG] main.py - Path: /ws/task | Methods: Unknown
+2025-06-24 19:55:15 [DEBUG] main.py - ================================
+
+2025-06-24 19:55:15 [INFO] main.py - Running on 8 cores
+2025-06-24 19:55:15 [INFO] main.py - Starting LiveTrade on different core...
+2025-06-24 19:55:15 [INFO] main.py - LiveTrade started
+2025-06-24 19:55:15 [INFO] Unknown - Starting uvicorn server...

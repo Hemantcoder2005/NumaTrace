@@ -1,0 +1,100 @@
+2025-06-24 21:41:55 [INFO] Unknown - Loading configuration from .env
+2025-06-24 21:41:55 [DEBUG] Unknown - Loaded: MARKET = india
+2025-06-24 21:41:55 [INFO] helpers\db.py - Registering all strategies to database
+2025-06-24 21:41:55 [INFO] helpers\db.py - All strategies registered to database
+2025-06-24 21:41:56 [INFO] main.py - Creating IPC objects...
+2025-06-24 21:41:59 [INFO] main.py - IPC objects created
+2025-06-24 21:41:59 [INFO] main.py - Config loaded: {'logger': <helpers.Numatix_logger.AdvancedLogger object at 0x000002207F278830>, 'MARKET': 'india'}
+2025-06-24 21:41:59 [INFO] routes\register_apps.py - Registering routes
+2025-06-24 21:41:59 [INFO] routes\register_apps.py - Home route registered
+2025-06-24 21:41:59 [INFO] main.py - Routes registered successfully
+2025-06-24 21:41:59 [DEBUG] main.py - ================================
+2025-06-24 21:41:59 [DEBUG] main.py - Path: /openapi.json | Methods: {'HEAD', 'GET'}
+2025-06-24 21:41:59 [DEBUG] main.py - Path: /docs | Methods: {'HEAD', 'GET'}
+2025-06-24 21:41:59 [DEBUG] main.py - Path: /docs/oauth2-redirect | Methods: {'HEAD', 'GET'}
+2025-06-24 21:41:59 [DEBUG] main.py - Path: /redoc | Methods: {'HEAD', 'GET'}
+2025-06-24 21:41:59 [DEBUG] main.py - Path: / | Methods: {'GET'}
+2025-06-24 21:41:59 [DEBUG] main.py - Path: /ping | Methods: {'GET'}
+2025-06-24 21:41:59 [DEBUG] main.py - Path: /strategies | Methods: {'GET'}
+2025-06-24 21:41:59 [DEBUG] main.py - Path: /parameters/{strategy_name} | Methods: {'GET'}
+2025-06-24 21:41:59 [DEBUG] main.py - Path: /parameters/{strategy_name} | Methods: {'POST'}
+2025-06-24 21:41:59 [DEBUG] main.py - Path: /parameters/{strategy_name}/{strategy_id} | Methods: {'DELETE'}
+2025-06-24 21:41:59 [DEBUG] main.py - Path: /backtest | Methods: {'POST'}
+2025-06-24 21:41:59 [DEBUG] main.py - Path: /backtest | Methods: {'GET'}
+2025-06-24 21:41:59 [DEBUG] main.py - Path: /backtest/{id} | Methods: {'DELETE'}
+2025-06-24 21:41:59 [DEBUG] main.py - Path: /backtest/{strategy_name}/{backtest_id} | Methods: {'GET'}
+2025-06-24 21:41:59 [DEBUG] main.py - Path: /ws/bots | Methods: Unknown
+2025-06-24 21:41:59 [DEBUG] main.py - Path: /bots | Methods: {'POST'}
+2025-06-24 21:41:59 [DEBUG] main.py - Path: /ws/task | Methods: Unknown
+2025-06-24 21:41:59 [DEBUG] main.py - ================================
+
+2025-06-24 21:41:59 [INFO] main.py - Running on 8 cores
+2025-06-24 21:41:59 [INFO] main.py - Starting LiveTrade on different core...
+2025-06-24 21:41:59 [INFO] main.py - LiveTrade started
+2025-06-24 21:41:59 [INFO] Unknown - Starting uvicorn server...
+2025-06-24 21:41:59 [INFO] routes\backtest.py - Getting all backtests grouped by strategy
+2025-06-24 21:42:00 [INFO] routes\backtest.py - Getting all backtests grouped by strategy
+2025-06-24 21:42:01 [INFO] routes\backtest.py - Getting all backtests grouped by strategy
+2025-06-24 21:42:02 [INFO] routes\backtest.py - Getting all backtests grouped by strategy
+2025-06-24 21:42:03 [INFO] routes\backtest.py - Getting all backtests grouped by strategy
+2025-06-24 21:42:04 [INFO] routes\backtest.py - Getting all backtests grouped by strategy
+2025-06-24 21:42:05 [INFO] routes\backtest.py - Getting all backtests grouped by strategy
+2025-06-24 21:42:06 [INFO] routes\backtest.py - Getting all backtests grouped by strategy
+2025-06-24 21:42:07 [INFO] routes\backtest.py - Getting all backtests grouped by strategy
+2025-06-24 21:42:08 [INFO] routes\backtest.py - Getting all backtests grouped by strategy
+2025-06-24 21:42:09 [INFO] routes\backtest.py - Getting all backtests grouped by strategy
+2025-06-24 21:42:10 [INFO] routes\backtest.py - Getting all backtests grouped by strategy
+2025-06-24 21:42:11 [INFO] routes\backtest.py - Getting all backtests grouped by strategy
+2025-06-24 21:42:12 [INFO] routes\backtest.py - Getting all backtests grouped by strategy
+2025-06-24 21:42:13 [INFO] routes\backtest.py - Getting all backtests grouped by strategy
+2025-06-24 21:42:14 [INFO] routes\backtest.py - Getting all backtests grouped by strategy
+2025-06-24 21:42:15 [INFO] routes\backtest.py - Getting all backtests grouped by strategy
+2025-06-24 21:42:16 [INFO] routes\backtest.py - Getting all backtests grouped by strategy
+2025-06-24 21:42:17 [INFO] routes\backtest.py - Getting all backtests grouped by strategy
+2025-06-24 21:42:18 [INFO] routes\backtest.py - Getting all backtests grouped by strategy
+2025-06-24 21:42:19 [INFO] routes\backtest.py - Getting all backtests grouped by strategy
+2025-06-24 21:42:20 [INFO] routes\backtest.py - Getting all backtests grouped by strategy
+2025-06-24 21:42:21 [INFO] routes\backtest.py - Getting all backtests grouped by strategy
+2025-06-24 21:42:22 [INFO] routes\backtest.py - Getting all backtests grouped by strategy
+2025-06-24 21:42:23 [INFO] routes\backtest.py - Getting all backtests grouped by strategy
+2025-06-24 21:42:24 [INFO] routes\backtest.py - Getting all backtests grouped by strategy
+2025-06-24 21:42:25 [INFO] routes\backtest.py - Getting all backtests grouped by strategy
+2025-06-24 21:42:26 [INFO] routes\backtest.py - Getting all backtests grouped by strategy
+2025-06-24 21:42:27 [INFO] routes\backtest.py - Getting all backtests grouped by strategy
+2025-06-24 21:42:28 [INFO] routes\backtest.py - Getting all backtests grouped by strategy
+2025-06-24 21:42:29 [INFO] routes\backtest.py - Getting all backtests grouped by strategy
+2025-06-24 21:42:30 [INFO] routes\backtest.py - Getting all backtests grouped by strategy
+2025-06-24 21:42:31 [INFO] routes\backtest.py - Getting all backtests grouped by strategy
+2025-06-24 21:42:32 [INFO] routes\backtest.py - Getting all backtests grouped by strategy
+2025-06-24 21:42:33 [INFO] routes\backtest.py - Getting all backtests grouped by strategy
+2025-06-24 21:42:34 [INFO] routes\backtest.py - Getting all backtests grouped by strategy
+2025-06-24 21:42:35 [INFO] routes\backtest.py - Getting all backtests grouped by strategy
+2025-06-24 21:42:36 [INFO] routes\backtest.py - Getting all backtests grouped by strategy
+2025-06-24 21:42:37 [INFO] routes\backtest.py - Getting all backtests grouped by strategy
+2025-06-24 21:42:38 [INFO] routes\backtest.py - Getting all backtests grouped by strategy
+2025-06-24 21:42:39 [INFO] routes\backtest.py - Getting all backtests grouped by strategy
+2025-06-24 21:42:40 [INFO] routes\backtest.py - Getting all backtests grouped by strategy
+2025-06-24 21:42:41 [INFO] routes\backtest.py - Getting all backtests grouped by strategy
+2025-06-24 21:42:42 [INFO] routes\backtest.py - Getting all backtests grouped by strategy
+2025-06-24 21:42:43 [INFO] routes\backtest.py - Getting all backtests grouped by strategy
+2025-06-24 21:42:44 [INFO] routes\backtest.py - Getting all backtests grouped by strategy
+2025-06-24 21:42:45 [INFO] routes\backtest.py - Getting all backtests grouped by strategy
+2025-06-24 21:42:46 [INFO] routes\backtest.py - Getting all backtests grouped by strategy
+2025-06-24 21:42:46 [INFO] routes\strategies.py - Getting strategies
+2025-06-24 21:42:46 [INFO] routes\task.py - Incoming connection...
+2025-06-24 21:42:46 [INFO] routes\task.py - Connection accepted
+2025-06-24 21:42:46 [DEBUG] routes\task.py - task_logs {'data': {}}
+2025-06-24 21:42:46 [INFO] routes\backtest.py - Getting all backtests grouped by strategy
+2025-06-24 21:42:46 [INFO] routes\strategies.py - Getting strategies
+2025-06-24 21:42:46 [INFO] routes\task.py - Incoming connection...
+2025-06-24 21:42:46 [INFO] routes\task.py - Connection accepted
+2025-06-24 21:42:46 [DEBUG] routes\task.py - task_logs {'data': {}}
+2025-06-24 21:42:47 [INFO] routes\backtest.py - Getting all backtests grouped by strategy
+2025-06-24 21:42:48 [INFO] routes\backtest.py - Getting all backtests grouped by strategy
+2025-06-24 21:42:49 [INFO] routes\backtest.py - Getting all backtests grouped by strategy
+2025-06-24 21:42:50 [INFO] routes\backtest.py - Getting all backtests grouped by strategy
+2025-06-24 21:42:51 [INFO] routes\backtest.py - Getting all backtests grouped by strategy
+2025-06-24 21:42:52 [INFO] routes\backtest.py - Getting all backtests grouped by strategy
+2025-06-24 21:42:53 [INFO] routes\backtest.py - Getting all backtests grouped by strategy
+2025-06-24 21:42:54 [INFO] routes\backtest.py - Getting all backtests grouped by strategy
+2025-06-24 21:42:55 [INFO] routes\backtest.py - Getting all backtests grouped by strategy
