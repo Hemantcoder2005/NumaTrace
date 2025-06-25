@@ -15,6 +15,11 @@ import os
 import shutil
 import glob
 
+
+
+
+def home_view(request):
+    return render(request, 'home.html')
 @login_required
 def dashboard_view(request):
     projects = Project.objects.all().order_by('-created_at')

@@ -8,6 +8,7 @@ def custom_404_view(request, exception):
 handler404 = custom_404_view
 
 urlpatterns = [
+    path("",home_view,name="home"),
     path("dashboard/",dashboard_view,name="dashboard"),
     path('api/projects/', create_project, name='create_project'),
     path('api/projects/<int:id>/', delete_project, name='delete_project'),

@@ -1,0 +1,523 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+    .hero-section {
+        min-height: calc(100vh - 140px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        background: linear-gradient(135deg, var(--glacial-byte) 0%, rgba(221, 242, 253, 0.3) 50%, rgba(90, 128, 255, 0.1) 100%);
+    }
+
+    .hero-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: 
+            radial-gradient(circle at 20% 80%, rgba(90, 128, 255, 0.15) 0%, transparent 50%),
+            radial-gradient(circle at 80% 20%, rgba(143, 255, 58, 0.1) 0%, transparent 50%),
+            radial-gradient(circle at 40% 40%, rgba(90, 128, 255, 0.08) 0%, transparent 50%);
+        animation: floatingBg 20s ease-in-out infinite;
+        pointer-events: none;
+    }
+
+    .hero-content {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 0 2rem;
+        position: relative;
+        z-index: 2;
+        animation: fadeInUp 1s ease-out forwards;
+        opacity: 0;
+    }
+
+    .hero-title {
+        font-size: clamp(3rem, 8vw, 5.5rem);
+        font-weight: 900;
+        color: var(--midnight-logic);
+        margin-bottom: 1.5rem;
+        line-height: 1.1;
+        background: linear-gradient(135deg, var(--midnight-logic) 0%, var(--quantum-core) 50%, var(--alert-lime) 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-shadow: 0 0 30px rgba(90, 128, 255, 0.3);
+        animation: titleGlow 3s ease-in-out infinite alternate;
+    }
+
+    .hero-subtitle {
+        font-size: clamp(1.2rem, 3vw, 1.8rem);
+        color: var(--insight-pulse);
+        margin-bottom: 2rem;
+        font-weight: 300;
+        letter-spacing: 0.5px;
+        opacity: 0;
+        animation: fadeInUp 1s ease-out 0.3s forwards;
+    }
+
+    .typing-container {
+        min-height: 120px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 3rem;
+        opacity: 0;
+        animation: fadeInUp 1s ease-out 0.6s forwards;
+    }
+
+    .typing-text {
+        font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+        color: var(--midnight-logic);
+        font-weight: 500;
+        line-height: 1.6;
+        text-align: center;
+        max-width: 800px;
+    }
+
+    .typing-cursor {
+        display: inline-block;
+        width: 3px;
+        height: 1.4em;
+        background: var(--quantum-core);
+        margin-left: 2px;
+        animation: blink 1s infinite;
+        vertical-align: text-bottom;
+    }
+
+    .cta-section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 2rem;
+        opacity: 0;
+        animation: fadeInUp 1s ease-out 0.9s forwards;
+    }
+
+    .dashboard-btn {
+        padding: 1.2rem 3rem;
+        font-size: 1.3rem;
+        background: linear-gradient(135deg, var(--quantum-core) 0%, #7a9cff 50%, var(--alert-lime) 100%);
+        color: var(--white);
+        border: none;
+        border-radius: 50px;
+        font-weight: 700;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 1rem;
+        position: relative;
+        overflow: hidden;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        box-shadow: 
+            0 10px 30px rgba(90, 128, 255, 0.3),
+            0 0 0 0 rgba(90, 128, 255, 0.5);
+        transform: translateY(0);
+        z-index: 3;
+    }
+
+    .dashboard-btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+        transition: left 0.6s ease;
+    }
+
+    .dashboard-btn:hover::before {
+        left: 100%;
+    }
+
+    .dashboard-btn:hover {
+        transform: translateY(-5px) scale(1.05);
+        box-shadow: 
+            0 15px 40px rgba(90, 128, 255, 0.4),
+            0 0 0 8px rgba(90, 128, 255, 0.1);
+        background: linear-gradient(135deg, #7a9cff 0%, var(--quantum-core) 50%, var(--alert-lime) 100%);
+    }
+
+    .dashboard-btn:active {
+        transform: translateY(-2px) scale(1.02);
+    }
+
+    .btn-icon {
+        font-size: 1.5rem;
+        transition: transform 0.3s ease;
+    }
+
+    .dashboard-btn:hover .btn-icon {
+        transform: translateX(5px);
+    }
+
+    .features-preview {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 2rem;
+        margin-top: 4rem;
+        opacity: 0;
+        animation: fadeInUp 1s ease-out 1.2s forwards;
+    }
+
+    .feature-card {
+        background: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.8);
+        border-radius: 20px;
+        padding: 2rem;
+        text-align: center;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 8px 25px rgba(10, 17, 34, 0.1);
+    }
+
+    .feature-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, var(--quantum-core), var(--alert-lime));
+        transform: scaleX(0);
+        transition: transform 0.3s ease;
+    }
+
+    .feature-card:hover::before {
+        transform: scaleX(1);
+    }
+
+    .feature-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 40px rgba(10, 17, 34, 0.15);
+        background: rgba(255, 255, 255, 0.85);
+    }
+
+    .feature-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        display: block;
+        background: linear-gradient(135deg, var(--quantum-core), var(--alert-lime));
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .feature-title {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: var(--midnight-logic);
+        margin-bottom: 0.8rem;
+    }
+
+    .feature-description {
+        color: var(--insight-pulse);
+        line-height: 1.6;
+        font-size: 0.95rem;
+    }
+
+    .floating-elements {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        pointer-events: none;
+        overflow: hidden;
+    }
+
+    .floating-element {
+        position: absolute;
+        background: linear-gradient(135deg, rgba(90, 128, 255, 0.1), rgba(143, 255, 58, 0.1));
+        border-radius: 50%;
+        animation: float 15s infinite linear;
+    }
+
+    .floating-element:nth-child(1) {
+        width: 80px;
+        height: 80px;
+        top: 20%;
+        left: 10%;
+        animation-duration: 20s;
+        animation-delay: 0s;
+    }
+
+    .floating-element:nth-child(2) {
+        width: 120px;
+        height: 120px;
+        top: 60%;
+        right: 15%;
+        animation-duration: 25s;
+        animation-delay: -5s;
+    }
+
+    .floating-element:nth-child(3) {
+        width: 60px;
+        height: 60px;
+        top: 80%;
+        left: 20%;
+        animation-duration: 18s;
+        animation-delay: -10s;
+    }
+
+    .floating-element:nth-child(4) {
+        width: 100px;
+        height: 100px;
+        top: 30%;
+        right: 30%;
+        animation-duration: 22s;
+        animation-delay: -15s;
+    }
+
+    /* Animations */
+    @keyframes fadeInUp {
+        0% {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes titleGlow {
+        0% {
+            text-shadow: 0 0 30px rgba(90, 128, 255, 0.3);
+        }
+        100% {
+            text-shadow: 0 0 40px rgba(90, 128, 255, 0.5), 0 0 60px rgba(143, 255, 58, 0.2);
+        }
+    }
+
+    @keyframes blink {
+        0%, 50% { opacity: 1; }
+        51%, 100% { opacity: 0; }
+    }
+
+    @keyframes float {
+        0% {
+            transform: translateY(0px) rotate(0deg);
+            opacity: 0.7;
+        }
+        33% {
+            transform: translateY(-30px) rotate(120deg);
+            opacity: 0.4;
+        }
+        66% {
+            transform: translateY(20px) rotate(240deg);
+            opacity: 0.8;
+        }
+        100% {
+            transform: translateY(0px) rotate(360deg);
+            opacity: 0.7;
+        }
+    }
+
+    @keyframes floatingBg {
+        0%, 100% {
+            transform: scale(1) rotate(0deg);
+            opacity: 0.5;
+        }
+        50% {
+            transform: scale(1.1) rotate(180deg);
+            opacity: 0.8;
+        }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .hero-section {
+            min-height: calc(100vh - 120px);
+        }
+
+        .hero-content {
+            padding: 0 1.5rem;
+        }
+
+        .typing-container {
+            min-height: 100px;
+            margin-bottom: 2rem;
+        }
+
+        .dashboard-btn {
+            padding: 1rem 2.5rem;
+            font-size: 1.1rem;
+        }
+
+        .features-preview {
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .feature-card {
+            padding: 1.5rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .hero-content {
+            padding: 0 1rem;
+        }
+
+        .typing-container {
+            min-height: 80px;
+            margin-bottom: 1.5rem;
+        }
+
+        .dashboard-btn {
+            padding: 0.9rem 2rem;
+            font-size: 1rem;
+        }
+
+        .feature-card {
+            padding: 1.2rem;
+        }
+    }
+</style>
+
+<div class="hero-section">
+    <div class="floating-elements">
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+    </div>
+    
+    <div class="hero-content">
+        <h1 class="hero-title" data-aos="fade-up">NumaTrace</h1>
+        <p class="hero-subtitle">Advanced Bot Monitoring & Log Management for Numatix</p>
+        
+        <div class="typing-container">
+            <div class="typing-text" id="typingText">
+                <span id="typed-text"></span>
+                <span class="typing-cursor"></span>
+            </div>
+        </div>
+        
+        <div class="cta-section">
+            <a href="/dashboard" class="dashboard-btn">
+                <span>Launch Dashboard</span>
+                <span class="btn-icon">🚀</span>
+            </a>
+        </div>
+
+        <div class="features-preview">
+            <div class="feature-card">
+                <span class="feature-icon">🤖</span>
+                <h3 class="feature-title">Bot Monitoring</h3>
+                <p class="feature-description">Real-time monitoring of all client bots with instant status updates and performance metrics.</p>
+            </div>
+            
+            <div class="feature-card">
+                <span class="feature-icon">📊</span>
+                <h3 class="feature-title">Log Analytics</h3>
+                <p class="feature-description">Comprehensive log collection and analysis to ensure everything is working perfectly.</p>
+            </div>
+            
+            <div class="feature-card">
+                <span class="feature-icon">⚡</span>
+                <h3 class="feature-title">Instant Alerts</h3>
+                <p class="feature-description">Get notified immediately when issues arise, before they impact your operations.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Typing effect
+    const textToType = "Are you fed up of running terminal commands? Then stop... pause... with NumaTrace, monitor your bots effortlessly and say goodbye to manual terminal monitoring forever!";
+    const typingSpeed = 50;
+    const pauseAfterComplete = 3000;
+    const eraseSpeed = 30;
+    
+    let i = 0;
+    let isDeleting = false;
+    let currentText = '';
+    
+    function typeWriter() {
+        const typedTextElement = document.getElementById('typed-text');
+        
+        if (!isDeleting && i < textToType.length) {
+            currentText += textToType.charAt(i);
+            i++;
+        } else if (isDeleting && i > 0) {
+            currentText = currentText.slice(0, -1);
+            i--;
+        }
+        
+        typedTextElement.textContent = currentText;
+        
+        let speed = isDeleting ? eraseSpeed : typingSpeed;
+        
+        if (!isDeleting && i === textToType.length) {
+            setTimeout(() => {
+                isDeleting = true;
+                typeWriter();
+            }, pauseAfterComplete);
+            return;
+        } else if (isDeleting && i === 0) {
+            isDeleting = false;
+            setTimeout(typeWriter, 500);
+            return;
+        }
+        
+        setTimeout(typeWriter, speed);
+    }
+    
+    // Start typing effect after page loads
+    window.addEventListener('load', () => {
+        setTimeout(typeWriter, 1500);
+    });
+    
+    // Add scroll-triggered animations
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, observerOptions);
+    
+    // Observe feature cards
+    document.addEventListener('DOMContentLoaded', () => {
+        const featureCards = document.querySelectorAll('.feature-card');
+        featureCards.forEach((card, index) => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(30px)';
+            card.style.transition = `opacity 0.6s ease ${index * 0.2}s, transform 0.6s ease ${index * 0.2}s`;
+            observer.observe(card);
+        });
+    });
+    
+    // Add interactive particle effect on mouse move
+    document.addEventListener('mousemove', (e) => {
+        const hero = document.querySelector('.hero-section');
+        const rect = hero.getBoundingClientRect();
+        const x = ((e.clientX - rect.left) / rect.width) * 100;
+        const y = ((e.clientY - rect.top) / rect.height) * 100;
+        
+        hero.style.background = `
+            radial-gradient(circle at ${x}% ${y}%, rgba(90, 128, 255, 0.1) 0%, transparent 50%),
+            linear-gradient(135deg, var(--glacial-byte) 0%, rgba(221, 242, 253, 0.3) 50%, rgba(90, 128, 255, 0.1) 100%)
+        `;
+    });
+</script>
+
+{% endblock %}

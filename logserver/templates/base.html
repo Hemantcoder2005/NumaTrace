@@ -15,6 +15,7 @@
             --white: #FFFFFF;
             --shadow: rgba(10, 17, 34, 0.2);
             --glow: rgba(90, 128, 255, 0.5);
+            --nav-height: 70px;
         }
 
         * {
@@ -25,7 +26,7 @@
 
         html, body {
             height: 100%;
-            overflow: hidden;
+            overflow-x: hidden;
         }
 
         body {
@@ -56,7 +57,8 @@
             justify-content: space-between;
             align-items: center;
             padding: 0 2rem;
-            height: 70px;
+            height: var(--nav-height);
+            transition: all 0.3s ease;
         }
 
         .logo-section {
@@ -203,24 +205,31 @@
             box-shadow: 0 4px 12px rgba(255, 77, 77, 0.4) !important;
         }
 
+        .login-btn {
+            background: linear-gradient(135deg, var(--quantum-core), #7a9cff) !important;
+        }
+
+        .login-btn:hover {
+            background: linear-gradient(135deg, #7a9cff, var(--quantum-core)) !important;
+            box-shadow: 0 4px 12px rgba(90, 128, 255, 0.4) !important;
+        }
+
         /* Main Content */
         main {
             flex: 1;
             width: 100%;
-            margin-top: 70px;
+            margin-top: var(--nav-height);
             display: flex;
             flex-direction: column;
-            overflow: hidden;
+            min-height: calc(100vh - var(--nav-height));
         }
 
         .content-wrapper {
-            align-items: flex-start !important;
-            justify-content: flex-start !important;
-            overflow-y: auto !important;
-            min-height: calc(100vh - 70px) !important;
-            height: auto !important;
-            margin-top: 10px;
+            flex: 1;
             padding: 2rem;
+            position: relative;
+            overflow-y: auto;
+            overflow-x: hidden;
         }
 
         .content-wrapper::before {
@@ -290,7 +299,6 @@
 
         .page-header {
             border-bottom: 2px solid var(--glacial-byte);
-            Common crawl: 0
             padding-bottom: 1.5rem;
             margin-bottom: 2rem;
             text-align: center;
@@ -344,23 +352,39 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* Responsive */
+        /* Responsive Design - Mobile First Approach */
         @media (max-width: 768px) {
+            :root {
+                --nav-height: 140px; /* Increased for mobile */
+            }
+
             .nav-container {
                 flex-direction: column;
-                height: auto;
-                padding: 1.5rem;
-                gap: 1.5rem;
+                height: var(--nav-height);
+                padding: 1rem;
+                gap: 1rem;
+                justify-content: center;
+            }
+
+            .logo-section {
+                order: 1;
             }
 
             nav ul {
-                gap: 0.75rem;
+                order: 2;
+                gap: 0.5rem;
                 flex-wrap: wrap;
                 justify-content: center;
+                width: 100%;
             }
 
             .company-info h1 {
                 font-size: 22px;
+            }
+
+            main {
+                margin-top: var(--nav-height);
+                min-height: calc(100vh - var(--nav-height));
             }
 
             .content-wrapper {
@@ -374,12 +398,39 @@
             .page-subtitle {
                 font-size: 1.1rem;
             }
+
+            /* Adjust navigation items for mobile */
+            nav a {
+                padding: 0.5rem 1rem;
+                font-size: 14px;
+            }
+
+            .welcome-user {
+                padding: 0.4rem 0.8rem;
+                font-size: 13px;
+            }
+
+            .user-avatar {
+                width: 28px;
+                height: 28px;
+                font-size: 12px;
+            }
         }
 
         @media (max-width: 480px) {
+            :root {
+                --nav-height: 120px; /* Slightly reduced for very small screens */
+            }
+
+            .nav-container {
+                padding: 0.8rem;
+                gap: 0.8rem;
+                height: var(--nav-height);
+            }
+
             .logo-placeholder {
-                width: 42px;
-                height: 42px;
+                width: 40px;
+                height: 40px;
             }
 
             .company-info h1 {
@@ -387,19 +438,19 @@
             }
 
             nav a {
-                padding: 0.6rem 1.2rem;
-                font-size: 15px;
+                padding: 0.4rem 0.8rem;
+                font-size: 13px;
             }
 
             .welcome-user {
-                font-size: 14px;
-                padding: 0.5rem 1rem;
+                font-size: 12px;
+                padding: 0.3rem 0.6rem;
             }
 
             .user-avatar {
-                width: 30px;
-                height: 30px;
-                font-size: 13px;
+                width: 26px;
+                height: 26px;
+                font-size: 11px;
             }
 
             .content-wrapper {
@@ -412,6 +463,83 @@
 
             .page-subtitle {
                 font-size: 1rem;
+            }
+
+            /* Ensure buttons are touch-friendly */
+            .btn {
+                padding: 0.6rem 1.5rem;
+                font-size: 14px;
+            }
+        }
+
+        /* Extra small screens */
+        @media (max-width: 320px) {
+            :root {
+                --nav-height: 110px;
+            }
+
+            .nav-container {
+                padding: 0.6rem;
+                gap: 0.6rem;
+            }
+
+            .company-info h1 {
+                font-size: 18px;
+            }
+
+            nav ul {
+                gap: 0.3rem;
+            }
+
+            nav a {
+                padding: 0.3rem 0.6rem;
+                font-size: 12px;
+            }
+
+            .welcome-user {
+                font-size: 11px;
+                padding: 0.2rem 0.5rem;
+            }
+
+            .content-wrapper {
+                padding: 0.8rem;
+            }
+        }
+
+        /* Landscape mobile orientation */
+        @media (max-width: 768px) and (orientation: landscape) {
+            :root {
+                --nav-height: 80px;
+            }
+
+            .nav-container {
+                flex-direction: row;
+                height: var(--nav-height);
+                padding: 0 1rem;
+            }
+
+            nav ul {
+                flex-direction: row;
+                gap: 0.5rem;
+            }
+        }
+
+        /* Tablet adjustments */
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .nav-container {
+                padding: 0 1.5rem;
+            }
+
+            .content-wrapper {
+                padding: 1.8rem;
+            }
+        }
+
+        /* Ensure content doesn't get cut off */
+        @media (max-height: 600px) {
+            .content-wrapper {
+                padding-top: 1rem;
+                padding-bottom: 1rem;
             }
         }
     </style>
@@ -431,12 +559,16 @@
                 </div>
             </div>
             <ul>
+                {% if user.is_authenticated %}
                 <li class="welcome-user">
                     <div class="user-avatar" id="avatar"></div>
                     Welcome {{user.username}}
                 </li>
                 <li><a href="/dashboard">Dashboard</a></li>
                 <li><a href="/accounts/logout" class="logout-btn">Logout</a></li>
+                {% else %}
+                <li><a href="/accounts/login" class="login-btn">Login</a></li>
+                {% endif %}
             </ul>
         </div>
     </nav>
@@ -449,8 +581,25 @@
     </main>
 </body>
 <script>
+    {% if user.is_authenticated %}
     const username = "{{ user.username }}";
     const formatted = username.charAt(0).toUpperCase() + username.slice(1);
-    document.getElementById("avatar").innerText = formatted[0];
+    const avatarElement = document.getElementById("avatar");
+    if (avatarElement) {
+        avatarElement.innerText = formatted[0];
+    }
+    {% endif %}
+
+    // Add viewport height adjustment for mobile browsers
+    function setViewportHeight() {
+        let vh = window.innerHeight * 0.01;
+        document.documentElement.style.setProperty('--vh', `${vh}px`);
+    }
+
+    window.addEventListener('resize', setViewportHeight);
+    window.addEventListener('orientationchange', () => {
+        setTimeout(setViewportHeight, 100);
+    });
+    setViewportHeight();
 </script>
 </html>
