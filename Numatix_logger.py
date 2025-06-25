@@ -1,3 +1,13 @@
+
+uri = "ws://94.136.191.209:8000/ws/logs/"
+
+
+project_id = "project_id"
+secret_key = "SecretKey"
+
+
+
+################################################   Don't edit below this line   ################################################
 import logging
 import os
 from datetime import datetime
@@ -19,9 +29,7 @@ colorama.init(autoreset=True)
 
 # WebSocket setup
 ws_global = None
-uri = "ws://127.0.0.1:8080/ws/logs/"
-project_id = "de8e975a018c5eb3"
-secret_key = "eEpq2QM-7bVl1x2KOVRY-3rf727d3o9QGohGltVEnAI"
+
 
 sender_thread = None
 ws_thread = None
@@ -315,3 +323,5 @@ if __name__ == "__main__":
     with PerformanceTimer("Sample operation"):
         time.sleep(0.1)
     print(f"{Fore.GREEN}✓ Demo completed!{Style.RESET_ALL}")
+
+#######################################################################################################################################################################
