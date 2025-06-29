@@ -458,7 +458,7 @@
 <script>
     const projectId = "{{ project_id }}";
     const secretKey = "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef";
-    const socket = new WebSocket(`ws://${window.location.host}/ws/logs/`);
+    const socket = new WebSocket(`wss://${window.location.host}/ws/logs/`);
     
     // Performance optimizations
     const MAX_VISIBLE_LOGS = 1000;

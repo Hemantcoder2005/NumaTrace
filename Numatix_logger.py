@@ -1,5 +1,5 @@
 
-uri = "ws://94.136.191.209:8000/ws/logs/"
+uri = "wss://numatrace.numatixsolutions.com//ws/logs/"
 
 
 project_id = "project_id"

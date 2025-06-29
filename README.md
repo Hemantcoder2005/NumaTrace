@@ -5,12 +5,12 @@ This guide explains how to set up and use the `Numatix_logger.py` module for log
 ## Prerequisites
 - Python 3.6+
 - Required packages: `colorama`, `websocket-client`
-- Access to the Numatix dashboard at `http://94.136.191.209:8000/dashboard`
+- Access to the Numatix dashboard at `https://numatrace.numatixsolutions.com//dashboard`
 
 ## Setup Instructions
 
 ### Step 1: Create a Project on the Numatix Dashboard
-1. Navigate to `http://94.136.191.209:8000/dashboard`.
+1. Navigate to `https://numatrace.numatixsolutions.com//dashboard`.
 2. Click on **Create Project** to generate a new project.
 3. Once created, note down the **project_id** and **secret_key** from the dashboard under your project details.
 
