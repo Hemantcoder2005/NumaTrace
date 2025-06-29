@@ -33,11 +33,9 @@ ALLOWED_HOSTS = [
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://numatrace.numatixsolutions.com',
-    'http://localhost',
-    'http://127.0.0.1',
-    'http://94.136.191.209'
+    "https://numatrace.numatixsolutions.com"
 ]
+
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
