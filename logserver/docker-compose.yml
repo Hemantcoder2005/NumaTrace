@@ -9,8 +9,6 @@ services:
   web:
     build: .
     command: gunicorn logserver.wsgi:application --bind 0.0.0.0:8000
-    ports:
-      - "8010:8000"
     environment:
       - DEBUG=0
       - ALLOWED_HOSTS=*
@@ -21,6 +19,6 @@ services:
     restart: always
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.logserver.rule=Host(`logserver.yourdomain.com`)"
+      - "traefik.http.routers.logserver.rule=Host(`numatrace.numatixsolutions.com`)"
       - "traefik.http.routers.logserver.entrypoints=websecure"
       - "traefik.http.routers.logserver.tls.certresolver=myresolver"
