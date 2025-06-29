@@ -8,7 +8,7 @@ services:
 
   web:
     build: .
-    command: uvicorn logserver.asgi:application --host 0.0.0.0 --port 8000
+    command: daphne -b 0.0.0.0 -p 8000 logserver.asgi:application
     environment:
       - DEBUG=0
       - ALLOWED_HOSTS=numatrace.numatixsolutions.com
