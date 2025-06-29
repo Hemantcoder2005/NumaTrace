@@ -13,7 +13,7 @@ services:
       - "8010:8010"
     environment:
       - DEBUG=0
-      - ALLOWED_HOSTS=numatrace.numatixsolutions.com
+      # - ALLOWED_HOSTS=numatrace.numatixsolutions.com
       - REDIS_HOST=redis
       - REDIS_PORT=6379
     depends_on:
