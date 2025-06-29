@@ -8,7 +8,7 @@ services:
 
   web:
     build: .
-    command: daphne -b 0.0.0.0 -p 8000 logserver.asgi:application
+    command: daphne -b 0.0.0.0 -p 8010 logserver.asgi:application
     environment:
       - DEBUG=0
       - ALLOWED_HOSTS=numatrace.numatixsolutions.com
