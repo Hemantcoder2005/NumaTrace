@@ -24,9 +24,10 @@ SECRET_KEY = 'django-insecure-_x&tk_*4rq7-qgqaxn7&%=3$im(6oft6c$l8gc5qmppwi=c9hb
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
-ALLOWED_HOSTS = ["*"]
-
+ALLOWED_HOSTS = ["numatrace.numatixsolutions.com"]
+CSRF_TRUSTED_ORIGINS = [
+    "https://numatrace.numatixsolutions.com"
+]
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
