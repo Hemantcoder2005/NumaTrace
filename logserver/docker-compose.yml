@@ -23,7 +23,7 @@ services:
       - traefik.http.routers.numatrace.entrypoints=web,websecure
       - traefik.http.routers.numatrace.tls=true
       - traefik.http.routers.numatrace.tls.certresolver=myresolver
-      - traefik.http.services.numatrace.loadbalancer.server.port=8000
+      - traefik.http.services.numatrace.loadbalancer.server.port=8010
       - traefik.http.middlewares.websocket.headers.customrequestheaders.Upgrade=websocket
       - traefik.http.middlewares.websocket.headers.customrequestheaders.Connection=Upgrade
       - traefik.http.routers.numatrace.middlewares=websocket
