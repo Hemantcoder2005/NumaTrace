@@ -8,7 +8,7 @@ services:
 
   web:
     build: .
-    command: gunicorn logserver.wsgi:application --bind 0.0.0.0:8000
+    command: uvicorn logserver.asgi:application --host 0.0.0.0 --port 8000
     environment:
       - DEBUG=0
       - ALLOWED_HOSTS=numatrace.numatixsolutions.com
