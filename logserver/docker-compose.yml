@@ -20,6 +20,7 @@ services:
     labels:
       - traefik.enable=true
       - traefik.http.routers.numatrace.rule=Host(`numatrace.numatixsolutions.com`)
-      - traefik.http.routers.numatrace.entrypoints=websecure
+      - traefik.http.routers.numatrace.entrypoints=web,websecure
+      - traefik.http.routers.numatrace.tls=true
       - traefik.http.routers.numatrace.tls.certresolver=myresolver
       - traefik.http.services.numatrace.loadbalancer.server.port=8000
