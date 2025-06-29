@@ -11,14 +11,15 @@ services:
     command: gunicorn logserver.wsgi:application --bind 0.0.0.0:8000
     environment:
       - DEBUG=0
-      - ALLOWED_HOSTS=*
+      - ALLOWED_HOSTS=numatrace.numatixsolutions.com
       - REDIS_HOST=redis
       - REDIS_PORT=6379
     depends_on:
       - redis
     restart: always
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.logserver.rule=Host(`numatrace.numatixsolutions.com`)"
-      - "traefik.http.routers.logserver.entrypoints=websecure"
-      - "traefik.http.routers.logserver.tls.certresolver=myresolver"
+      - traefik.enable=true
+      - traefik.http.routers.numatrace.rule=Host(`numatrace.numatixsolutions.com`)
+      - traefik.http.routers.numatrace.entrypoints=websecure
+      - traefik.http.routers.numatrace.tls.certresolver=myresolver
+      - traefik.http.services.numatrace.loadbalancer.server.port=8000
